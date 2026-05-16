@@ -53,7 +53,7 @@ class PlotWidget extends StatelessWidget {
         child: Center(
           child: plot.isUnlocked
               ? plot.cropId == null
-                    ? Icon(MyIcon.balloons, color: Colors.white70, size: 32)
+                    ? Icon(MyIcon.eggs, color: Colors.white70, size: 32)
                     : StreamBuilder(
                         stream: timerStream,
                         builder: (context, snapshot) {
@@ -64,19 +64,15 @@ class PlotWidget extends StatelessWidget {
                           final elapsed = now.difference(plantedTime).inSeconds;
                           final progress = elapsed / duration;
                           Widget child = Image.asset(
-                            'assets/image/${id}_0.png',
+                            'assets/image/${id}_2.png',
                           );
                           // 1. mới trồng
-                          if (progress >= .3 && progress < .6) {
+                          if (progress >= .4 && progress < .8) {
                             child = Image.asset('assets/image/${id}_1.png');
                           }
-                          // 2. đang lớn
-                          if (progress >= .6 && progress < .9) {
-                            child = Image.asset('assets/image/${id}_2.png');
-                          }
                           // 3. chín
-                          if (progress >= .9) {
-                            child = Image.asset('assets/image/${id}_3.png');
+                          if (progress >= .8) {
+                            child = Image.asset('assets/image/${id}_0.png');
                           }
 
                           return Column(
@@ -182,42 +178,46 @@ class PlotWidget extends StatelessWidget {
   void _showSeedPicker(BuildContext context, int plotIndex, GameProvider game) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        decoration: BoxDecoration(
-          color: Colors.green.shade100,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        padding: EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'CHỌN HẠT GIỐNG',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.brown[900],
-              ),
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: .65,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 18,
+      builder: (context) => FractionallySizedBox(
+        heightFactor: 0.7, // 70% màn hình
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.green.shade100,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'CỬA HÀNG TRỨNG GIỐNG',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.brown[900],
                 ),
-                itemCount: game.seeds.length,
-                itemBuilder: (context, index) {
-                  Seed seed = game.seeds[index];
-                  return _seedOption(context, plotIndex, seed);
-                },
               ),
-            ),
-            SizedBox(height: 20),
-          ],
+              SizedBox(height: 20),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: .65,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 18,
+                  ),
+                  itemCount: game.seeds.length,
+                  itemBuilder: (context, index) {
+                    Seed seed = game.seeds[index];
+                    return _seedOption(context, plotIndex, seed);
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
@@ -243,9 +243,9 @@ class PlotWidget extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.green.shade800,
-              Colors.green.shade500,
-              Colors.green.shade800,
+              Colors.green.shade400,
+              Colors.green.shade200,
+              Colors.green.shade400,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -253,7 +253,7 @@ class PlotWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.green.shade800.withAlpha(100),
+              color: Colors.green.shade400.withAlpha(100),
               blurRadius: 8,
               offset: const Offset(0, 3),
             ),
@@ -262,11 +262,12 @@ class PlotWidget extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 4),
-            SizedBox(
-              width: 80,
-              height: 80,
+            Container(
+              width: 180,
+              height: 180,
+              padding: EdgeInsets.all(8),
               child: Image.asset(
-                'assets/image/${seed.id}_3.png',
+                'assets/image/${seed.id}_0.png',
               ), // Thay bằng Image.asset sau
             ),
             Text(
@@ -277,15 +278,15 @@ class PlotWidget extends StatelessWidget {
               ),
             ),
             Text(
-              'Mua: ${seed.buyPrice} xu',
+              'Mua với: ${seed.buyPrice} xu',
               style: TextStyle(color: Colors.white70),
             ),
             Text(
-              'Chờ: ${seed.duration.inSeconds} giây',
+              'Chờ trong: ${seed.duration.inSeconds} giây',
               style: TextStyle(color: Colors.white70),
             ),
             Text(
-              'Bán: ${seed.sellPrice} xu',
+              'Bán được: ${seed.sellPrice} xu',
               style: TextStyle(color: Colors.white),
             ),
           ],

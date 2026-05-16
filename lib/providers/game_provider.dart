@@ -14,52 +14,52 @@ class GameProvider extends ChangeNotifier {
 
   List<Seed> seeds = [
     Seed(
-      id: 'rice',
-      name: 'Lúa nước',
-      buyPrice: 30,
-      sellPrice: 60,
-      duration: Duration(seconds: 30),
-      imagePath: 'rice',
+      id: 'triceratops',
+      name: 'Khủng long Sừng tấm',
+      buyPrice: 300,
+      sellPrice: 600,
+      duration: Duration(seconds: 300),
+      imagePath: 'triceratops',
     ),
     Seed(
-      id: 'corn',
-      name: 'Bắp ngô',
-      buyPrice: 50,
-      sellPrice: 100,
-      duration: Duration(seconds: 60),
-      imagePath: 'corn',
+      id: 'pteranodon',
+      name: 'Khủng long Bay',
+      buyPrice: 900,
+      sellPrice: 2200,
+      duration: Duration(seconds: 800),
+      imagePath: 'pteranodon',
     ),
     Seed(
-      id: 'tomato',
-      name: 'Cà chua',
-      buyPrice: 80,
-      sellPrice: 160,
-      duration: Duration(seconds: 80),
-      imagePath: 'tomato',
+      id: 'trex',
+      name: 'Khủng long T-Rex',
+      buyPrice: 1600,
+      sellPrice: 3200,
+      duration: Duration(seconds: 1800),
+      imagePath: 'trex',
     ),
     Seed(
-      id: 'strawberry',
-      name: 'Dâu tây',
-      buyPrice: 100,
-      sellPrice: 220,
-      duration: Duration(seconds: 180),
-      imagePath: 'strawberry',
+      id: 'brachiosaurus',
+      name: 'Khủng long Cổ dài',
+      buyPrice: 1200,
+      sellPrice: 2800,
+      duration: Duration(seconds: 1400),
+      imagePath: 'brachiosaurus',
     ),
     Seed(
-      id: 'chilli',
-      name: 'Ớt chuông',
-      buyPrice: 60,
-      sellPrice: 120,
-      duration: Duration(seconds: 100),
-      imagePath: 'chilli',
+      id: 'velociraptor',
+      name: 'Khủng long Đuôi chuỳ',
+      buyPrice: 2200,
+      sellPrice: 3800,
+      duration: Duration(seconds: 2400),
+      imagePath: 'velociraptor',
     ),
     Seed(
-      id: 'eggplant',
-      name: 'Cà tím',
-      buyPrice: 70,
-      sellPrice: 100,
-      duration: Duration(seconds: 80),
-      imagePath: 'eggplant',
+      id: 'stegosaurus',
+      name: 'Khủng long Ba sừng',
+      buyPrice: 1600,
+      sellPrice: 2800,
+      duration: Duration(seconds: 2800),
+      imagePath: 'stegosaurus',
     ),
   ];
 
@@ -96,7 +96,7 @@ class GameProvider extends ChangeNotifier {
     final data = box.get('plots');
     plots.clear();
     if (data == null || (data as List).isEmpty) {
-      for (int i = 0; i < 60; i++) {
+      for (int i = 0; i < 30; i++) {
         plots.add(
           Plot(
             id: i,
