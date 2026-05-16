@@ -1,5 +1,6 @@
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pagame06/providers/game_provider.dart';
 import 'package:pagame06/screens/home.dart';
@@ -14,6 +15,7 @@ void main() async {
 
   await Flame.device.fullScreen();
   await Flame.device.setPortrait();
+  FlutterNativeSplash.remove();
 
   runApp(
     ChangeNotifierProvider(
