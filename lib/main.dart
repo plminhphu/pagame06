@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Thần Nông',
+      title: 'Đảo Khủng Long',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'MyFont',

@@ -57,7 +57,7 @@ class _ShopScreenState extends State<ShopScreen> {
     int nodes =
         int.tryParse(
           storeProduct.title
-              .replaceAll('(Thần Nông)', '')
+              .replaceAll('(Đảo Khủng Long)', '')
               .replaceAll('Nạp', '')
               .replaceAll('Xu', '')
               .trim(),
@@ -171,7 +171,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 ),
                                 Text(
                                   storeProduct.title
-                                      .replaceAll('(Thần Nông)', '')
+                                      .replaceAll('(Đảo Khủng Long)', '')
                                       .trim(),
                                   style: const TextStyle(
                                     color: Colors.white,
