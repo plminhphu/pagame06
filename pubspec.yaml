@@ -23,8 +23,8 @@ dependencies:
   in_app_purchase: ^3.2.0
 
 flutter_native_splash:
-  color: "#d5f4ff"
-  color_dark: "#d5f4ff"
+  color: "#0907d6"
+  color_dark: "#0907d6"
   image: assets/favicon.png
   android: true
   ios: true
