@@ -19,8 +19,6 @@ class Plot extends HiveObject {
 
   @HiveField(5)
   double progress;
-  @HiveField(6)
-  String progressImg;
 
   Plot({
     required this.id,
@@ -29,7 +27,6 @@ class Plot extends HiveObject {
     this.plantTime,
     this.isReady = false,
     this.progress = 0,
-    this.progressImg = '',
   });
 
   Map<String, dynamic> toJson() {

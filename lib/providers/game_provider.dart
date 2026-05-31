@@ -22,52 +22,76 @@ class GameProvider extends ChangeNotifier {
 
   List<Seed> seeds = [
     Seed(
-      id: 'rice',
-      name: 'Lúa nước',
-      buyPrice: 30,
-      sellPrice: 60,
-      duration: Duration(seconds: 30),
-      imagePath: 'rice',
+      id: 'acro',
+      name: 'Acro',
+      buyPrice: 300,
+      sellPrice: 680,
+      duration: Duration(seconds: 300),
+      imagePath: 'acro',
     ),
     Seed(
-      id: 'corn',
-      name: 'Bắp ngô',
-      buyPrice: 50,
-      sellPrice: 100,
-      duration: Duration(seconds: 60),
-      imagePath: 'corn',
+      id: 'ankylosaur',
+      name: 'Ankylosaur',
+      buyPrice: 520,
+      sellPrice: 1600,
+      duration: Duration(seconds: 620),
+      imagePath: 'ankylosaur',
     ),
     Seed(
-      id: 'tomato',
-      name: 'Cà chua',
-      buyPrice: 80,
-      sellPrice: 160,
-      duration: Duration(seconds: 80),
-      imagePath: 'tomato',
+      id: 'brachio',
+      name: 'Brachio',
+      buyPrice: 840,
+      sellPrice: 3860,
+      duration: Duration(seconds: 840),
+      imagePath: 'brachio',
     ),
     Seed(
-      id: 'strawberry',
-      name: 'Dâu tây',
-      buyPrice: 100,
-      sellPrice: 220,
-      duration: Duration(seconds: 180),
-      imagePath: 'strawberry',
+      id: 'herrera',
+      name: 'Herrera',
+      buyPrice: 800,
+      sellPrice: 2020,
+      duration: Duration(seconds: 680),
+      imagePath: 'herrera',
     ),
     Seed(
-      id: 'chilli',
-      name: 'Ớt chuông',
-      buyPrice: 60,
-      sellPrice: 120,
-      duration: Duration(seconds: 100),
-      imagePath: 'chilli',
+      id: 'pterosaur',
+      name: 'Pterosaur',
+      buyPrice: 620,
+      sellPrice: 920,
+      duration: Duration(seconds: 700),
+      imagePath: 'pterosaur',
     ),
     Seed(
-      id: 'eggplant',
-      name: 'Cà tím',
-      buyPrice: 70,
-      sellPrice: 100,
-      duration: Duration(seconds: 80),
-      imagePath: 'eggplant',
+      id: 'spino',
+      name: 'Spino',
+      buyPrice: 760,
+      sellPrice: 1800,
+      duration: Duration(seconds: 850),
+      imagePath: 'spino',
+    ),
+    Seed(
+      id: 'suchomimus',
+      name: 'Suchomimus',
+      buyPrice: 860,
+      sellPrice: 2400,
+      duration: Duration(seconds: 950),
+      imagePath: 'suchomimus',
+    ),
+    Seed(
+      id: 'trex',
+      name: 'Trex',
+      buyPrice: 1260,
+      sellPrice: 4600,
+      duration: Duration(seconds: 1050),
+      imagePath: 'trex',
+    ),
+    Seed(
+      id: 'triceratops',
+      name: 'Triceratops',
+      buyPrice: 360,
+      sellPrice: 900,
+      duration: Duration(seconds: 550),
+      imagePath: 'triceratops',
     ),
   ];
 
@@ -157,23 +181,11 @@ class GameProvider extends ChangeNotifier {
       final readyTime = plot.plantTime!.add(Duration(seconds: duration));
       if (DateTime.now().isAfter(readyTime) && !plot.isReady) {
         plot.progress = 1;
-        plot.progressImg = '3';
         plot.isReady = true;
         notifyListeners();
         changed = true;
       } else if (plot.plantTime != null && !plot.isReady) {
         plot.progress = now.difference(plot.plantTime!).inSeconds / duration;
-        if (plot.progress < .25) {
-          plot.progressImg = '';
-        } else if (plot.progress >= .25 && plot.progress < .5) {
-          plot.progressImg = '0';
-        } else if (plot.progress >= .5 && plot.progress < .75) {
-          plot.progressImg = '1';
-        } else if (plot.progress >= .75 && plot.progress < .9) {
-          plot.progressImg = '2';
-        } else if (plot.progress >= .9) {
-          plot.progressImg = '3';
-        }
         notifyListeners();
       }
     }
@@ -195,7 +207,6 @@ class GameProvider extends ChangeNotifier {
     plot.plantTime = null;
     plot.isReady = false;
     plot.progress = 0;
-    plot.progressImg = '';
     Sounds.coinin();
     notifyListeners();
     saveGame();
@@ -211,7 +222,6 @@ class GameProvider extends ChangeNotifier {
     triggerMoneyEffect(-cost);
     await Future.delayed(Durations.medium2);
     plot.progress = 0;
-    plot.progressImg = '';
     plot.cropId = cropId;
     plot.plantTime = DateTime.now();
     plot.isReady = false;

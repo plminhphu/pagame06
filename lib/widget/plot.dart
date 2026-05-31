@@ -48,17 +48,13 @@ class PlotWidget extends StatelessWidget {
                 ? -(10 + plot.progress * 10)
                 : -(index % 2 == 0 ? 5 : 15).toDouble(),
             child: plot.isUnlocked
-                ? plot.cropId == null || plot.progressImg == ''
+                ? plot.cropId == null
                       ? SizedBox()
                       : Image.asset(
-                          'assets/image/${game.getImagepath(plot.cropId)}_${plot.progressImg}.png',
+                          'assets/image/${game.getImagepath(plot.cropId)}.png',
                           filterQuality: FilterQuality.none,
                         )
-                : Image.asset(
-                    'assets/image/wooden.png',
-                    filterQuality: FilterQuality.none,
-                    colorBlendMode: BlendMode.darken,
-                  ),
+                : SizedBox(),
           ),
           if (plot.cropId != null)
             Positioned(
