@@ -56,7 +56,7 @@ class _ShopScreenState extends State<ShopScreen> {
     int nodes =
         int.tryParse(
           storeProduct.title
-              .replaceAll('(Thần Nông)', '')
+              .replaceAll('(Đảo Khủng Long)', '')
               .replaceAll('Nạp', '')
               .replaceAll('Xu', '')
               .trim(),
@@ -99,12 +99,12 @@ class _ShopScreenState extends State<ShopScreen> {
               crossAxisSpacing: 8,
               mainAxisSpacing: 12,
             ),
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(8),
             itemCount: storeProducts.length,
             itemBuilder: (context, index) {
               final storeProduct = storeProducts[index];
               String title = storeProduct.title
-                  .replaceAll('(Thần Nông)', '')
+                  .replaceAll('(Đảo Khủng Long)', '')
                   .trim();
               return TweenAnimationBuilder(
                 duration: Duration(milliseconds: 250 + (index * 120)),
@@ -120,9 +120,9 @@ class _ShopScreenState extends State<ShopScreen> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color(0xFF3E8E41),
-                        Color(0xFF2E7D32),
-                        Color(0xFF1B5E20),
+                        Color.fromARGB(255, 79, 72, 45),
+                        Color.fromARGB(255, 115, 96, 23),
+                        Color.fromARGB(255, 79, 72, 45),
                       ],
                     ),
                     border: Border.all(color: Colors.green.shade200, width: 2),
@@ -168,7 +168,10 @@ class _ShopScreenState extends State<ShopScreen> {
                                       int nodes =
                                           int.tryParse(
                                             storeProduct.title
-                                                .replaceAll('(Thần Nông)', '')
+                                                .replaceAll(
+                                                  '(Đảo Khủng Long)',
+                                                  '',
+                                                )
                                                 .replaceAll('Nạp', '')
                                                 .replaceAll('Xu', '')
                                                 .trim(),

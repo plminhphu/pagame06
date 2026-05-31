@@ -115,15 +115,15 @@ class GameProvider extends ChangeNotifier {
   }
 
   void loadGame() {
-    coins = box.get('coins', defaultValue: 3200);
+    coins = box.get('coins', defaultValue: 6300);
     final data = box.get('plots');
     plots.clear();
     if (data == null || (data as List).isEmpty) {
-      for (int i = 0; i < 40; i++) {
+      for (int i = 0; i < 30; i++) {
         plots.add(
           Plot(
             id: i,
-            isUnlocked: i < 6, // 6 ô đầu mở
+            isUnlocked: i < 5, // 5 ô đầu mở
           ),
         );
       }

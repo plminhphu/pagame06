@@ -525,7 +525,7 @@ class _HomeScreenState extends State<HomeScreen> {
               left: 6,
               right: 6,
               bottom: 40,
-              child: Image.asset('assets/image/${seed.id}_3.png'),
+              child: Image.asset('assets/image/${seed.id}.png'),
             ),
             Positioned.fill(
               bottom: 6,

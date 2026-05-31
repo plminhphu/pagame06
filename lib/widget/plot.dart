@@ -21,40 +21,44 @@ class PlotWidget extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          Positioned(
-            bottom: 0,
-            left: -15,
-            right: -15,
-            child: Image.asset(
-              'assets/image/plot_${plot.isUnlocked
-                  ? plot.cropId == null
-                        ? 'unlocked'
-                        : 'croped'
-                  : 'locked'}.png',
-              filterQuality: FilterQuality.none,
-            ),
-          ),
           Positioned.fill(
             top: plot.isUnlocked
-                ? (-20)
+                ? -(plot.progress * 5)
                 : (index % 2 == 0 ? 10 : 15).toDouble(),
-            bottom: plot.isUnlocked
-                ? (10 + plot.progress * 10)
-                : (index % 2 == 0 ? 15 : 10).toDouble(),
+            bottom: -20,
             left: plot.isUnlocked
-                ? -(10 + plot.progress * 10)
+                ? -(plot.progress * 15)
                 : -(index % 2 == 0 ? 15 : 5).toDouble(),
             right: plot.isUnlocked
-                ? -(10 + plot.progress * 10)
-                : -(index % 2 == 0 ? 5 : 15).toDouble(),
+                ? -(plot.progress * 15)
+                : -(index % 2 == 0 ? 0 : 20).toDouble(),
+            child:
+                plot.isUnlocked && plot.progress >= 0.1 && plot.cropId != null
+                ? Image.asset(
+                    'assets/image/${game.getImagepath(plot.cropId)}.png',
+                    filterQuality: FilterQuality.none,
+                  )
+                : SizedBox(),
+          ),
+          Positioned(
+            bottom: 0,
+            left: plot.isUnlocked
+                ? plot.progress < 0.1 && plot.cropId != null
+                      ? 15
+                      : -2
+                : 10,
+            right: plot.isUnlocked
+                ? plot.progress < 0.1 && plot.cropId != null
+                      ? 15
+                      : -2
+                : 10,
             child: plot.isUnlocked
                 ? plot.cropId == null
-                      ? SizedBox()
-                      : Image.asset(
-                          'assets/image/${game.getImagepath(plot.cropId)}.png',
-                          filterQuality: FilterQuality.none,
-                        )
-                : SizedBox(),
+                      ? Image.asset('assets/image/plot_locked.png')
+                      : plot.progress < 0.1
+                      ? Image.asset('assets/image/plot_croped.png')
+                      : Image.asset('assets/image/plot_locked.png')
+                : Image.asset('assets/image/plot_unlocked.png'),
           ),
           if (plot.cropId != null)
             Positioned(
