@@ -1,7 +1,7 @@
 name: pagame06
 description: "PA Game 06 - DinoS"
 publish_to: 'none'
-version: 1.0.3+4
+version: 1.0.4+4
 
 environment:
   sdk: ^3.11.5
@@ -23,8 +23,8 @@ dependencies:
   in_app_purchase: ^3.2.0
 
 flutter_native_splash:
-  color: "#0907d6"
-  color_dark: "#0907d6"
+  color: "#d5f4ff"
+  color_dark: "#d5f4ff"
   image: assets/favicon.png
   android: true
   ios: true
@@ -68,4 +68,3 @@ flutter:
     - family: MainFont
       fonts:
         - asset: assets/font/main.ttf
-

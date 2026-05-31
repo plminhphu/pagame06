@@ -17,13 +17,21 @@ class Plot extends HiveObject {
   @HiveField(4)
   bool isReady;
 
+  @HiveField(5)
+  double progress;
+  @HiveField(6)
+  String progressImg;
+
   Plot({
     required this.id,
     this.isUnlocked = false,
     this.cropId,
     this.plantTime,
     this.isReady = false,
+    this.progress = 0,
+    this.progressImg = '',
   });
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

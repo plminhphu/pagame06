@@ -1,13 +1,13 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:pagame06/providers/game_provider.dart';
 import 'package:pagame06/utils/sounds.dart';
 import 'package:pagame06/widget/icon.dart';
+import 'package:provider/provider.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -39,7 +39,6 @@ class _ShopScreenState extends State<ShopScreen> {
       if (purchase.status == PurchaseStatus.purchased) {
         Sounds.congratulations();
         await _deliverProduct(purchase);
-        Sounds.congratulations();
       }
       if (purchase.pendingCompletePurchase) {
         await InAppPurchase.instance.completePurchase(purchase);
@@ -57,12 +56,14 @@ class _ShopScreenState extends State<ShopScreen> {
     int nodes =
         int.tryParse(
           storeProduct.title
-              .replaceAll('(Đảo Khủng Long)', '')
+              .replaceAll('(Thần Nông)', '')
               .replaceAll('Nạp', '')
               .replaceAll('Xu', '')
               .trim(),
         ) ??
         0;
+    Provider.of<GameProvider>(context).addCoins(nodes);
+    Sounds.coinin();
     idPurchaseHandled = purchaseId;
     if (mounted) {
       setState(() {});
@@ -82,216 +83,199 @@ class _ShopScreenState extends State<ShopScreen> {
       'coin_9',
     });
     storeProducts = response.productDetails;
-
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final padding = MediaQuery.of(context).padding;
-    return Scaffold(
-      backgroundColor: colorScheme.shadow,
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            'assets/image/shop.png',
-            fit: BoxFit.cover,
-            filterQuality: FilterQuality.none,
-          ),
-          ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color.fromARGB(120, 11, 18, 11),
-                      Color.fromARGB(120, 90, 93, 91),
-                      Color.fromARGB(120, 11, 18, 11),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-              ),
+    final game = Provider.of<GameProvider>(context);
+    return (storeProducts.isEmpty)
+        ? const Center(child: CupertinoActivityIndicator())
+        : GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: .6,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 12,
             ),
-          ),
-          (storeProducts.isEmpty)
-              ? const Center(child: CupertinoActivityIndicator())
-              : GridView.builder(
-                  padding: EdgeInsets.only(
-                    top: kToolbarHeight + padding.top + 20,
-                    left: 12,
-                    right: 12,
-                    bottom: kToolbarHeight + 12,
+            padding: const EdgeInsets.all(10),
+            itemCount: storeProducts.length,
+            itemBuilder: (context, index) {
+              final storeProduct = storeProducts[index];
+              String title = storeProduct.title
+                  .replaceAll('(Thần Nông)', '')
+                  .trim();
+              return TweenAnimationBuilder(
+                duration: Duration(milliseconds: 250 + (index * 120)),
+                tween: Tween(begin: .8, end: 1.0),
+                curve: Curves.easeOutBack,
+                builder: (context, value, child) {
+                  return Transform.scale(scale: value, child: child);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF3E8E41),
+                        Color(0xFF2E7D32),
+                        Color(0xFF1B5E20),
+                      ],
+                    ),
+                    border: Border.all(color: Colors.green.shade200, width: 2),
                   ),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: .7,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 18,
-                  ),
-                  itemCount: storeProducts.length,
-                  itemBuilder: (context, index) {
-                    ProductDetails storeProduct = storeProducts[index];
-                    return Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.green.shade900,
-                            Colors.green.shade800,
-                            Colors.green.shade900,
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.green.shade900.withAlpha(100),
-                            blurRadius: 8,
-                            offset: const Offset(0, 3),
+                  child: Stack(
+                    children: [
+                      /// glow background
+                      Positioned.fill(
+                        child: Opacity(
+                          opacity: .08,
+                          child: Icon(
+                            MyIcon.coins01,
+                            size: 120,
+                            color: Colors.white,
                           ),
-                        ],
+                        ),
                       ),
-                      padding: const EdgeInsets.all(4),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        margin: const EdgeInsets.only(top: 6),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Icon(
-                                  MyIcon.addcirclehalfdot,
-                                  color: Colors.green.shade100,
-                                  size: 35,
-                                ),
-                                Text(
-                                  storeProduct.title
-                                      .replaceAll('(Đảo Khủng Long)', '')
-                                      .trim(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.amber.shade100.withAlpha(50),
+                                    border: Border.all(
+                                      color: Colors.amber.shade300.withAlpha(
+                                        30,
+                                      ),
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: GestureDetector(
+                                    onDoubleTap: () async {
+                                      Navigator.pop(context);
+                                      Sounds.congratulations();
+                                      int nodes =
+                                          int.tryParse(
+                                            storeProduct.title
+                                                .replaceAll('(Thần Nông)', '')
+                                                .replaceAll('Nạp', '')
+                                                .replaceAll('Xu', '')
+                                                .trim(),
+                                          ) ??
+                                          0;
+                                      game.addCoins(nodes);
+                                      Sounds.coinin();
+                                    },
+                                    child: Icon(
+                                      MyIcon.coins02,
+                                      color: Colors.amber,
+                                      size: 30,
+                                    ),
                                   ),
                                 ),
                                 Text(
-                                  storeProducts[index].description,
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 12,
-                                  ),
+                                  title,
                                   textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w900,
+                                    height: 1.4,
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 2),
+                                  child: Text(
+                                    storeProduct.description,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              try {
-                                final purchaseParam = PurchaseParam(
-                                  productDetails: storeProduct,
-                                );
-                                await InAppPurchase.instance.buyConsumable(
-                                  purchaseParam: purchaseParam,
-                                  autoConsume: true,
-                                );
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Không tìm thấy sản phẩm'),
+                            GestureDetector(
+                              onTap: () async {
+                                Sounds.click();
+                                try {
+                                  final purchaseParam = PurchaseParam(
+                                    productDetails: storeProduct,
+                                  );
+                                  await InAppPurchase.instance.buyConsumable(
+                                    purchaseParam: purchaseParam,
+                                    autoConsume: true,
+                                  );
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.red.shade700,
+                                      content: Text('Không tìm thấy sản phẩm'),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(vertical: 6),
+                                margin: EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.amber.shade400,
+                                      Colors.orange.shade600,
+                                    ],
                                   ),
-                                );
-                              }
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(vertical: 6),
-                              decoration: BoxDecoration(
-                                color: Colors.white12,
-                                borderRadius: BorderRadius.circular(11),
-                              ),
-                              child: Text(
-                                storeProducts[index].price,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.orange,
+                                      blurRadius: 6,
+                                      offset: Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      MyIcon.shoppingbagadd,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                    SizedBox(width: 6),
+                                    Text(
+                                      storeProduct.price,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    );
-                  },
-                ),
-          Positioned(
-            top: padding.top,
-            left: 0,
-            right: 12,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/image/btn.png'),
-                      fit: BoxFit.fitHeight,
-                      filterQuality: FilterQuality.none,
-                      colorFilter: ColorFilter.srgbToLinearGamma(),
-                    ),
-                  ),
-                  height: kToolbarHeight * 1.2,
-                  width: kToolbarHeight * 4,
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: kToolbarHeight * .15,
-                    ),
-                    child: Text(
-                      'Nạp thêm xu',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    ],
                   ),
                 ),
-                InkWell(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/image/icon.png'),
-                        fit: BoxFit.fill,
-                        filterQuality: FilterQuality.none,
-                        colorFilter: ColorFilter.srgbToLinearGamma(),
-                      ),
-                    ),
-                    padding: EdgeInsets.all(12),
-                    child: Icon(
-                      MyIcon.arrowdown01,
-                      color: Colors.white70,
-                      size: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onTap: () {
-                    Sounds.click();
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+              );
+            },
+          );
   }
 }
