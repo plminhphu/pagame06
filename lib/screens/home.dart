@@ -21,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final int _crossAxisCount = 5;
+  final int _crossAxisCount = 4;
   Timer? rewardTimer;
   double rewardProgress = 0;
   bool canClaimReward = false;
@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         rewardProgress += 0.1 / totalSeconds;
         if (rewardProgress >= 1) {
           rewardProgress = 1;
-          rewardCoins = Random().nextInt(77) + 3;
+          rewardCoins = (Random().nextInt(77) + 23) * 10;
           canClaimReward = true;
           timer.cancel();
         }
@@ -72,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
     startRewardTimer();
   }
 
-  // Hàm tính toán tọa độ (X, Y) chính xác tuyệt đối của ô đất dựa trên kích thước màn hình thực tế
   Offset _getPlotOffset(
     int index,
     double screenWidth,
@@ -80,35 +79,18 @@ class _HomeScreenState extends State<HomeScreen> {
     double availableHeight,
     int totalPlots,
   ) {
-    /// Grid ngang thực tế
     final gridWidth = screenWidth - 40;
-
-    /// Kích thước item thực tế
     final tileWidth = gridWidth / _crossAxisCount;
-
-    final tileHeight = tileWidth / 1.4;
-
-    /// Row/Col
+    final tileHeight = tileWidth / 1.2;
     final row = index ~/ _crossAxisCount;
     final col = index % _crossAxisCount;
-
-    /// Tổng hàng
     final totalRows = (totalPlots / _crossAxisCount).ceil();
-
-    /// Height grid thật
     final gridHeight = totalRows * tileHeight;
-
-    /// Vì Align.bottomCenter
     final startY = topPadding + (availableHeight - gridHeight);
-
-    /// Tọa độ ô
     final tileX = 20 + col * tileWidth;
     final tileY = startY + row * tileHeight;
-
-    /// Neo chân nhân vật
-    final footX = tileX + tileWidth * .72;
-    final footY = tileY + tileHeight * .88;
-
+    final footX = tileX + tileWidth * .8;
+    final footY = tileY + tileHeight * .9;
     return Offset(footX, footY);
   }
 
@@ -133,12 +115,17 @@ class _HomeScreenState extends State<HomeScreen> {
         fit: StackFit.expand,
         children: [
           // 1. Giữ nguyên Hình nền cũ
-          Image.asset(
-            'assets/image/home.png',
-            fit: BoxFit.cover,
-            filterQuality: FilterQuality.none,
+          GestureDetector(
+            onTap: () {
+              Sounds.click();
+              game.showSeedPicker = false;
+            },
+            child: Image.asset(
+              'assets/image/home.png',
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.none,
+            ),
           ),
-          // 3. Giữ nguyên Lưới các ô đất cũ
           Positioned(
             top: gridTopPadding,
             left: 20,
@@ -153,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisCount: _crossAxisCount,
                   crossAxisSpacing: 0,
                   mainAxisSpacing: 0,
-                  childAspectRatio: 1.4,
+                  childAspectRatio: 1.2,
                 ),
                 itemCount: game.plots.length,
                 itemBuilder: (context, index) {
@@ -168,48 +155,51 @@ class _HomeScreenState extends State<HomeScreen> {
               milliseconds: game.isWalking ? game.currentMoveDuration : 0,
             ),
             curve: Curves.easeOutQuad,
-
-            /// neo theo chân
             left: charOffset.dx - 25,
-            top: charOffset.dy - 46,
-            child: Stack(
-              alignment: Alignment.center,
-              clipBehavior: Clip.none,
-              children: [
-                if (game.isWalking)
-                  SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: Image.asset(
-                      'assets/image/character_walking.gif',
-                      height: 50,
+            top: charOffset.dy - 40,
+            child: GestureDetector(
+              onTap: () {
+                game.moveTo(game.currentPlotIndex);
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+                  if (game.isWalking)
+                    SizedBox(
                       width: 50,
+                      height: 50,
+                      child: Image.asset(
+                        'assets/image/character_walking.gif',
+                        height: 50,
+                        width: 50,
+                      ),
+                    ),
+                  if (!game.isWalking)
+                    SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: Image.asset(
+                        'assets/image/character_hi.gif',
+                        height: 50,
+                        width: 50,
+                      ),
+                    ),
+                  Positioned(
+                    top: -5,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: game.moneyEffects.map((effect) {
+                        return _FloatingText(
+                          key: effect.key,
+                          text: effect.text,
+                          color: effect.color,
+                        );
+                      }).toList(),
                     ),
                   ),
-                if (!game.isWalking)
-                  SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: Image.asset(
-                      'assets/image/character_hi.gif',
-                      height: 50,
-                      width: 50,
-                    ),
-                  ),
-                Positioned(
-                  top: -5,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: game.moneyEffects.map((effect) {
-                      return _FloatingText(
-                        key: effect.key,
-                        text: effect.text,
-                        color: effect.color,
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Positioned(
@@ -229,14 +219,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(12),
                     gradient: LinearGradient(
                       colors: [
-                        Colors.green.shade900,
-                        Colors.green.shade700,
-                        Colors.green.shade900,
+                        Colors.blue.shade700,
+                        Colors.blue.shade600,
+                        Colors.blue.shade700,
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    border: Border.all(color: Colors.green.shade300, width: 2),
+                    border: Border.all(color: Colors.blue.shade900, width: 2),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black26,
@@ -250,9 +240,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         width: 30,
                         height: 30,
-                        child: const Icon(
+                        child: Icon(
                           MyIcon.coins01,
-                          color: Colors.amber,
+                          color: Colors.blue.shade50,
                           size: 26,
                         ),
                       ),
@@ -261,8 +251,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         '${NumberFormat('#,###', 'vi_VN').format(game.coins).replaceAll(',', '.')} xu',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.amber,
+                        style: TextStyle(
+                          color: Colors.blue.shade50,
                           fontSize: 28,
                           fontWeight: FontWeight.w900,
                           height: 1,
@@ -290,12 +280,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 45,
                                 child: CircularProgressIndicator(
                                   value: rewardProgress,
-                                  strokeWidth: 5,
+                                  strokeWidth: 6,
                                   backgroundColor: Colors.white24,
                                   valueColor: AlwaysStoppedAnimation(
                                     canClaimReward
-                                        ? Colors.lightGreen
-                                        : Colors.lightBlue,
+                                        ? Colors.lightGreen.shade700
+                                        : Colors.lightBlue.shade700,
                                   ),
                                 ),
                               ),
@@ -379,10 +369,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       maxHeight: 620,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFFF5FFE8),
+                                      color: Colors.blue.shade50,
                                       borderRadius: BorderRadius.circular(28),
                                       border: Border.all(
-                                        color: Colors.green.shade800,
+                                        color: Colors.blue.shade800,
                                         width: 4,
                                       ),
                                       boxShadow: [
@@ -422,19 +412,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             shape: BoxShape.circle,
                             gradient: LinearGradient(
                               colors: [
-                                Colors.amber.shade400,
-                                Colors.deepOrange.shade300,
+                                Colors.blue.shade400,
+                                Colors.blueAccent.shade400,
                               ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
                             border: Border.all(
-                              color: Colors.amber.shade800,
-                              width: 3,
+                              color: Colors.blue.shade600,
+                              width: 2,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.amber.shade200,
+                                color: Colors.blue.shade200,
                                 blurRadius: 12,
                                 offset: const Offset(0, 4),
                               ),
@@ -458,15 +448,15 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: padding.bottom + 10,
             left: 0,
             right: 0,
-            height: game.showSeedPicker ? 320 : 0,
+            height: game.showSeedPicker ? 380 : 0,
             child: game.showSeedPicker
                 ? GridView.builder(
                     scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(18),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          childAspectRatio: 1.2,
+                          childAspectRatio: 1.1,
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 8,
                         ),
@@ -501,59 +491,61 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.green.shade800,
-              Colors.green.shade500,
-              Colors.green.shade800,
+              Colors.blue.shade400,
+              Colors.blue.shade200,
+              Colors.blue.shade400,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white70, width: 3),
+          border: Border.all(color: Colors.white70, width: 2),
           boxShadow: [
             BoxShadow(
-              color: Colors.black87,
-              blurRadius: 12,
-              offset: const Offset(0, 6),
+              color: Colors.black38,
+              blurStyle: BlurStyle.outer,
+              blurRadius: 8,
             ),
           ],
         ),
         child: Stack(
           children: [
             Positioned.fill(
-              top: 6,
+              top: 12,
               left: 6,
               right: 6,
-              bottom: 40,
-              child: Image.asset('assets/image/${seed.id}.png'),
+              child: Image.asset(
+                'assets/image/${seed.id}.png',
+                fit: BoxFit.contain,
+                alignment: Alignment.topCenter,
+              ),
             ),
             Positioned.fill(
-              bottom: 6,
+              top: 4,
+              left: 6,
+              right: 6,
+              bottom: 2,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Mua vào: ${seed.buyPrice} xu',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      height: 1.15,
-                    ),
-                  ),
-                  Text(
-                    'Chờ trong: ${seed.duration.inSeconds} giây',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      height: 1.15,
-                    ),
-                  ),
-                  Text(
-                    'Bán ra: ${seed.sellPrice} xu',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      height: 1.15,
+                  Flexible(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '-${seed.buyPrice}xu',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                        Text(
+                          '${seed.duration.inSeconds}s',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                        Text(
+                          '+${seed.sellPrice}xu',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ],
                     ),
                   ),
                   Text(
@@ -562,7 +554,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       fontSize: 16,
-                      height: 1.15,
                     ),
                   ),
                 ],

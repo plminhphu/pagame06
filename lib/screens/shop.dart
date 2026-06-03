@@ -96,8 +96,8 @@ class _ShopScreenState extends State<ShopScreen> {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: .6,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 12,
+              crossAxisSpacing: 6,
+              mainAxisSpacing: 8,
             ),
             padding: const EdgeInsets.all(8),
             itemCount: storeProducts.length,
@@ -115,17 +115,17 @@ class _ShopScreenState extends State<ShopScreen> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(12),
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color.fromARGB(255, 79, 72, 45),
-                        Color.fromARGB(255, 115, 96, 23),
-                        Color.fromARGB(255, 79, 72, 45),
+                        Colors.blue.shade800,
+                        Colors.blue.shade900,
+                        Colors.blue.shade800,
                       ],
                     ),
-                    border: Border.all(color: Colors.green.shade200, width: 2),
+                    border: Border.all(color: Colors.blue.shade200, width: 2),
                   ),
                   child: Stack(
                     children: [
@@ -153,11 +153,9 @@ class _ShopScreenState extends State<ShopScreen> {
                                   padding: EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.amber.shade100.withAlpha(50),
+                                    color: Colors.blue.shade100.withAlpha(50),
                                     border: Border.all(
-                                      color: Colors.amber.shade300.withAlpha(
-                                        30,
-                                      ),
+                                      color: Colors.blue.shade300.withAlpha(30),
                                       width: 2,
                                     ),
                                   ),
@@ -182,17 +180,18 @@ class _ShopScreenState extends State<ShopScreen> {
                                     },
                                     child: Icon(
                                       MyIcon.coins02,
-                                      color: Colors.amber,
+                                      color: Colors.blue.shade100,
                                       size: 30,
                                     ),
                                   ),
                                 ),
+                                SizedBox(height: 6),
                                 Text(
                                   title,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w900,
                                     height: 1.4,
                                   ),
@@ -232,19 +231,25 @@ class _ShopScreenState extends State<ShopScreen> {
                               },
                               child: Container(
                                 width: double.infinity,
-                                padding: EdgeInsets.symmetric(vertical: 6),
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 4,
+                                  horizontal: 6,
+                                ),
                                 margin: EdgeInsets.all(4),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(8),
                                   gradient: LinearGradient(
                                     colors: [
-                                      Colors.amber.shade400,
-                                      Colors.orange.shade600,
+                                      Colors.blue.shade600,
+                                      Colors.blue.shade300,
+                                      Colors.blue.shade600,
                                     ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.orange,
+                                      color: Colors.blue.shade100.withAlpha(50),
                                       blurRadius: 6,
                                       offset: Offset(0, 4),
                                     ),
@@ -256,14 +261,14 @@ class _ShopScreenState extends State<ShopScreen> {
                                     Icon(
                                       MyIcon.shoppingbagadd,
                                       color: Colors.white,
-                                      size: 20,
+                                      size: 16,
                                     ),
-                                    SizedBox(width: 6),
+                                    SizedBox(width: 4),
                                     Text(
                                       storeProduct.price,
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),

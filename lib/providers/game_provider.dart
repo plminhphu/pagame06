@@ -119,11 +119,11 @@ class GameProvider extends ChangeNotifier {
     final data = box.get('plots');
     plots.clear();
     if (data == null || (data as List).isEmpty) {
-      for (int i = 0; i < 30; i++) {
+      for (int i = 0; i < 16; i++) {
         plots.add(
           Plot(
             id: i,
-            isUnlocked: i < 5, // 5 ô đầu mở
+            isUnlocked: i < 4, // 4 ô đầu mở
           ),
         );
       }
@@ -179,7 +179,7 @@ class GameProvider extends ChangeNotifier {
       if (plot.cropId == null || plot.plantTime == null) continue;
       final duration = getDurationSeconds(plot.cropId);
       final readyTime = plot.plantTime!.add(Duration(seconds: duration));
-      if (DateTime.now().isAfter(readyTime) && !plot.isReady) {
+      if (now.isAfter(readyTime) && !plot.isReady) {
         plot.progress = 1;
         plot.isReady = true;
         notifyListeners();
@@ -212,21 +212,20 @@ class GameProvider extends ChangeNotifier {
     saveGame();
   }
 
-  // SỬA HÀM TRỒNG CÂY: Gọi qua controller mới
   void plantCrop(int plotIndex, String cropId, int cost) async {
     final plot = plots[plotIndex];
     if (!plot.isUnlocked || plot.cropId != null || coins < cost) return;
     Sounds.coinout();
     coins -= cost;
-    // 🔥 HIỆU ỨNG MỚI: Trừ tiền ngay trên đầu nhân vật
     triggerMoneyEffect(-cost);
-    await Future.delayed(Durations.medium2);
     plot.progress = 0;
+    plot.isReady = false;
+    showSeedPicker = false;
+    notifyListeners();
+    Sounds.seed();
+    await Future.delayed(Durations.medium4);
     plot.cropId = cropId;
     plot.plantTime = DateTime.now();
-    plot.isReady = false;
-    Sounds.seed();
-    showSeedPicker = false;
     notifyListeners();
     saveGame();
   }
@@ -257,8 +256,7 @@ class GameProvider extends ChangeNotifier {
 
   Future<void> moveTo(int targetIndex) async {
     showSeedPicker = false;
-    int crossAxisCount = 5;
-    if (currentPlotIndex == targetIndex) return;
+    int crossAxisCount = 4;
     int currentRow = currentPlotIndex ~/ crossAxisCount;
     int currentCol = currentPlotIndex % crossAxisCount;
     int targetRow = targetIndex ~/ crossAxisCount;
@@ -321,9 +319,9 @@ class GameProvider extends ChangeNotifier {
               width: 320,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: const Color(0xFFF5FFE8),
-                borderRadius: BorderRadius.circular(28),
-                border: Border.all(color: Colors.green.shade800, width: 4),
+                color: Colors.blue.shade100,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: Colors.blue.shade800, width: 2),
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 28,
@@ -335,28 +333,32 @@ class GameProvider extends ChangeNotifier {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(MyIcon.tree01, size: 72, color: Colors.green.shade700),
+                  Icon(
+                    MyIcon.squarearrowdatatransferdiagonal,
+                    size: 72,
+                    color: Colors.blue.shade700,
+                  ),
 
                   const SizedBox(height: 12),
 
                   Text(
-                    'MỞ RỘNG Ô ĐẤT',
+                    'MỞ RỘNG KHOÁ CHUỒNG',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green.shade900,
+                      color: Colors.blue.shade900,
                     ),
                   ),
 
                   const SizedBox(height: 18),
 
                   Text(
-                    'Dùng $price xu để mở ô đất thứ ${index + 1}?',
+                    'Dùng $price xu để mở chuồng thứ ${index + 1}?',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
                       height: 1.4,
-                      color: Colors.brown.shade700,
+                      color: Colors.grey.shade700,
                     ),
                   ),
 
@@ -374,10 +376,10 @@ class GameProvider extends ChangeNotifier {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             decoration: BoxDecoration(
-                              color: Colors.green.shade100,
+                              color: Colors.blue.shade100,
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: Colors.green.shade700,
+                                color: Colors.blue.shade700,
                                 width: 2,
                               ),
                             ),
@@ -386,7 +388,7 @@ class GameProvider extends ChangeNotifier {
                               'ĐỂ SAU',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.green.shade900,
+                                color: Colors.blue.shade900,
                               ),
                             ),
                           ),
@@ -405,7 +407,7 @@ class GameProvider extends ChangeNotifier {
                               SnackBar(
                                 content: Text(
                                   res
-                                      ? 'Đã mở ô đất thứ ${index + 1}'
+                                      ? 'Đã mở chuồng thứ ${index + 1}'
                                       : 'Không đủ xu',
                                 ),
                                 backgroundColor: res
@@ -417,7 +419,7 @@ class GameProvider extends ChangeNotifier {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             decoration: BoxDecoration(
-                              color: Colors.green.shade700,
+                              color: Colors.blue.shade700,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             alignment: Alignment.center,
