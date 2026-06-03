@@ -81,21 +81,21 @@ class PlotWidget extends StatelessWidget {
             ),
           if (plot.isUnlocked)
             Positioned(
+              top: 0,
               bottom: 0,
               left: 0,
               right: 0,
-              height: wPlot,
               child: (plot.progress <= 0 || plot.progress > 0.1)
                   ? Image.asset(
                       'assets/image/plot_locked.png',
                       filterQuality: FilterQuality.none,
-                      fit: BoxFit.fitHeight,
+                      fit: BoxFit.contain,
                       alignment: Alignment.bottomCenter,
                     )
                   : Image.asset(
                       'assets/image/plot_fcroped.png',
                       filterQuality: FilterQuality.none,
-                      fit: BoxFit.fitHeight,
+                      fit: BoxFit.contain,
                       alignment: Alignment.bottomCenter,
                     ),
             ),
@@ -105,10 +105,10 @@ class PlotWidget extends StatelessWidget {
             AnimatedPositioned(
               duration: Durations.extralong4,
               curve: Curves.easeIn,
-              top: 10,
+              top: 12,
               bottom: 0,
-              left: 10,
-              right: 10,
+              left: 12,
+              right: 12,
               child: Image.asset(
                 'assets/image/plot_croped.png',
                 filterQuality: FilterQuality.none,
@@ -118,9 +118,9 @@ class PlotWidget extends StatelessWidget {
             ),
           if (plot.cropId != null)
             Positioned(
-              top: 12,
-              left: 8,
-              right: 8,
+              top: 10,
+              left: 14,
+              right: 14,
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2),
@@ -138,9 +138,9 @@ class PlotWidget extends StatelessWidget {
             ),
           if (plot.cropId != null)
             Positioned(
-              top: 1.5,
-              left: 4,
-              right: 4,
+              top: -1,
+              left: 10,
+              right: 10,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
