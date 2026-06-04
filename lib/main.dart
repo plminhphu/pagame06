@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: AppService.navigatorKey,
-      title: 'Đảo Khủng Long',
+      title: 'Little Roar',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'MyFont',

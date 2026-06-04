@@ -56,7 +56,7 @@ class _ShopScreenState extends State<ShopScreen> {
     int nodes =
         int.tryParse(
           storeProduct.title
-              .replaceAll('(Đảo Khủng Long)', '')
+              .replaceAll('(Little Roar)', '')
               .replaceAll('Nạp', '')
               .replaceAll('Xu', '')
               .trim(),
@@ -104,7 +104,7 @@ class _ShopScreenState extends State<ShopScreen> {
             itemBuilder: (context, index) {
               final storeProduct = storeProducts[index];
               String title = storeProduct.title
-                  .replaceAll('(Đảo Khủng Long)', '')
+                  .replaceAll('(Little Roar)', '')
                   .trim();
               return TweenAnimationBuilder(
                 duration: Duration(milliseconds: 250 + (index * 120)),
@@ -166,10 +166,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                       int nodes =
                                           int.tryParse(
                                             storeProduct.title
-                                                .replaceAll(
-                                                  '(Đảo Khủng Long)',
-                                                  '',
-                                                )
+                                                .replaceAll('(Little Roar)', '')
                                                 .replaceAll('Nạp', '')
                                                 .replaceAll('Xu', '')
                                                 .trim(),
