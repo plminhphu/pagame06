@@ -1,7 +1,7 @@
 name: pagame06
 description: "PA Game 06 - Little Roar"
 publish_to: 'none'
-version: 1.0.5+5
+version: 1.0.6+6
 
 environment:
   sdk: ^3.11.5
@@ -20,7 +20,7 @@ dependencies:
   hive_flutter: ^1.1.0
   provider: ^6.1.5+1
   flutter_animate: ^4.5.2
-  in_app_purchase: ^3.2.0
+  in_app_purchase: ^3.3.1
 
 flutter_native_splash:
   color: "#d5f4ff"
